@@ -1,0 +1,361 @@
+exports.handler = async (event) => {
+    const intentName = event.sessionState.intent.name;
+    
+    if(intentName == "Bienvenida") {
+        const NombreUsuario = event.sessionState.intent.slots.Usuario.value.originalValue; //Nombre de usuario
+        
+        return {
+            "sessionState": {
+                "dialogAction": {
+                    "type": "ElicitIntent" //Llamar a la intención en base a su frase clave
+                }
+            },
+            "messages": [{
+                "contentType": "PlainText",
+                "content": "Hola " + NombreUsuario + ", Cómo te puedo ayudar?"
+            }]
+        };
+    }
+    
+    if(intentName == "AyudaCursos") {
+      
+      //Si está vacío y el usuario aún no completa nada
+      if(event.sessionState.intent.slots.NivelComprension == null) {
+            return {
+                "sessionState": {
+                    "dialogAction" : {
+                        "slotToElicit": "NivelComprension",
+                        "type": "ElicitSlot"
+                    },
+                    "intent": {
+                        "name": "AyudaCursos",
+                        "state": "InProgress"
+                    }
+                },
+                "messages": [{
+                    "contentType": "PlainText",
+                    "content": "Del 1 al 5 ¿cuál crees que es tu nivel de comprensión de los contenidos?"
+                }]                
+            };
+        }
+        
+        //Si el nivel de comprensión es 5, le dice el mensaje
+        if(event.sessionState.intent.slots.NivelComprension.value.interpretedValue == 5){
+            return {
+                "sessionState": {
+                    "dialogAction": {
+                        "type": "Close" //Como dice que entiende todo, se termina ahí la intención
+                    },
+                    "intent": {
+                        "name": "AyudaCursos",
+                        "state": "Fulfilled" //Terminó la intención, por eso está en fulfilled
+                    }
+                },
+                "messages": [{
+                    "contentType": "PlainText",
+                    "content": "Ya veo amiga me alegra que estés comprendiendo de manera exitosa tu curso. "+
+                    " Asimismo, no olvides llevar a la par tus conocimientos en las Plataformas E-learning. " +
+                    "No olvides que estoy acá para servirte :)."
+                }]
+            };
+        }
+        
+        //Si responde que su nivel de comprensión está en el rango de 1 a 4
+        else if(event.sessionState.slots.NivelComprension.value.interpretedValue < 5 && event.sessionState.slots.NivelComprension.value.interpretedValue >= 1){
+            return {
+                "sessionState": {
+                    "dialogAction": {
+                        "slotToElicit": "Curso",
+                        "type": "ElicitSlot"
+                    },
+                    "intent": {
+                        "name": "AyudaCursos",
+                        "state": "InProgress" //Aún no termina la intención, por eso está InProgress
+                    }
+                },
+                "messages": [{
+                    "contentType": "PlainText",
+                    "content": "Cuál fue el curso que te causó mayor dificultad?"
+                }]
+            };
+        }
+        
+        //Si ya ingresó el nombre del curso, que te pida cómo prefiere estudiar
+        if(event.sessionState.intent.slots.Curso != null){
+            return {
+                "sessionState": {
+                    "dialogAction": {
+                        "slotToElicit": "TipoEstudio",
+                        "type": "ElicitSlot"
+                    },
+                    "intent": {
+                        "name": "AyudaCursos",
+                        "state": "InProgress" //Aún no termina la intención, por eso está InProgress
+                    }
+                },
+                "messages": [{
+                    "contentType": "PlainText",
+                    "content": "Ya veo para mejorar tu experiencia de usuario dentro de la aplicación, " +
+                    "me gustaria saber como te sientes más cómoda aprendiendo en grupo o sola?"
+                }]
+            };
+        }
+        
+        //Si prefiere estudiar en grupo (eligió la opción para grupo)
+        if(event.sessionState.intent.slots.TipoEstudio.value.interpretedValue == "Grupo"){
+            return {
+                "sessionState": {
+                    "dialogAction": {
+                        "type": "Close" //Termina la función porque le dice que revise el apartado de cursos
+                    },
+                    "intent": {
+                        "name": "AyudaCursos",
+                        "state": "Fulfilled" //Como termina la función, por eso está en "Fulfilled"
+                    }
+                },
+                "messages": [{
+                    "contentType": "PlainText",
+                    "content": "TE QUEREMOS MENCIONAR QUE EN EL APARTADO DEL CURSO INSCRITO EXISTE UN BOTÓN DE GRUPO, EN EL CUAL PUEDES VER A OTRAS " +
+                    "CHICAS QUE ESTÁN EN EL MISMO TÓPICO Y Podrían ENTABLAR UNA COMUNICACIÓN CON EL FIN DE REFORZAR ALGUNAS DUDAS."
+                }]
+            };
+        }
+        
+        //Si prefiere estudiar sola, pide elegir el tipo de comprensión (podcast, video, contenido visual)
+        if(event.sessionState.intent.slots.TipoEstudio.value.interpretedValue == "Sola"){
+            return {
+                "sessionState": {
+                    "dialogAction" : {
+                        "slotToElicit": "TipoComprension",
+                        "type": "ElicitSlot"
+                    },
+                    "intent": {
+                        "name": "AyudaCursos",
+                        "state": "InProgress"
+                    }
+                },
+                "messages": [{
+                    "contentType": "PlainText",
+                    "content": "cómo te gustaría reforzar lo aprendido. Tal vez un podcast, un video o un contenido visual te podría ayudar comentame cual te gustaría."
+                }]
+            };            
+        }
+        
+        //Respuesta Final: Mandar el contenido según el curso y tipo de contenido
+        if(event.sessionState.intent.slots.TipoComprension != null){
+            //Variables para el diccionario
+            const contenidofinal = event.sessionState.intent.slots.TipoComprension.value.interpretedValue; //TipoComprensión elegido
+            const nombrecurso = event.sessionState.intent.slots.Curso.value.interpretedValue; //Curso elegido
+            
+            
+            
+        }
+        
+    }
+    
+    if (intentName == "Motivacion") {
+        //Cuando el usuario aún no ha ingresado nada
+        if(event.sessionState.intent.slots.SentimientoEmocional == null) {
+            return {
+                "sessionState": {
+                    "dialogAction" : {
+                        "slotToElicit": "SentimientoEmocional",
+                        "type": "ElicitSlot"
+                    },
+                    "intent": {
+                        "name": "Motivacion",
+                        "state": "InProgress"
+                    }
+                },
+                "messages": [{
+                    "contentType": "PlainText",
+                    "content": "Del 1 al 5 como te sientes emocionalmente en este punto de tu vida "
+                }]                
+            };
+        }
+        
+        //Si el valor de UtilidadVideo == SI, confirman que les servió el video
+        if(event.sessionState.intent.slots.UtilidadVideo.value.interpretedValue == "Si" ) {
+            return {
+                "sessionState": {
+                    "dialogAction" : {
+                        "type": "Close"
+                    },
+                    "intent": {
+                        "name": "Motivacion",
+                        "state": "Fulfilled"
+                    },
+                },
+                "messages":[{
+                    "contentType": "PlainText",
+                    "content": "Que bueno que te haya servido el material que escogimos para ti. Recuerda que estoy para servirte :)"
+                }]
+            };
+        }
+        
+        //Si no les sirvió el video (video = No), pasar a preguntar para lo de coach o psicologo
+        else if(event.sessionState.intent.slots.UtilidadVideo.value.interpretedValue == "No" ) {
+            return {
+                "sessionState": {
+                    "dialogAction" : {
+                        "slotToElicit": "CoachPsicologo",
+                        "type": "ElicitSlot"
+                    },
+                    "intent": {
+                        "name": "Motivacion",
+                        "state": "InProgress"
+                    },
+                },
+                "messages":[{
+                    "contentType": "PlainText",
+                    "content": "como te gustaria ser acompañada para sobrellevar este momento en el que te encuentras. ¿Te gustaría un coach o un psicólogo?"
+                }]
+            };
+        }
+        
+        //Si prefieren que los ayude un coach
+        if(event.sessionState.intent.slots.CoachPsicologo.value.interpretedValue == "Coach") {
+            return {
+                "sessionState": {
+                    "dialogAction" : {
+                        "type": "Close"
+                    },
+                    "intent": {
+                        "name": "Motivacion",
+                        "state": "Fulfilled"
+                    },
+                },
+                "messages":[{
+                    "contentType": "PlainText",
+                    "content": "Te recomendamos que consultes a este grupo de profesionales en coaching que están dispuestos a servirte en todo momento :) " +
+                    "Ingresa al siguiente link: https://icfperu.pe/directorio-coach/"
+                }]
+            };
+        }
+        
+        //Si prefieren que los ayude un psicologo
+        else if(event.sessionState.intent.slots.CoachPsicologo.value.interpretedValue == "Psicologo") {
+            return {
+                "sessionState": {
+                    "dialogAction" : {
+                        "type": "Close"
+                    },
+                    "intent": {
+                        "name": "Motivacion",
+                        "state": "Fulfilled"
+                    },
+                },
+                "messages":[{
+                    "contentType": "PlainText",
+                    "content": "Te recomendamos visitar la página de Primeros auxilios psicológicos que brinda la Universidada Continental, te podrán ayudar de forma gratuita a resolver tus problemas :) " +
+                    "Ingresa al siguiente link: https://ucontinental.edu.pe/atencion-de-primeros-auxilios-psicologicos-online/#:~:text=Los%20%C2%ABPrimeros%20Auxilios%20Psicol%C3%B3gicos%20(PAP,%2C%20denominados%20%E2%80%9Cconsultorios%20virtuales%E2%80%9D."
+                }]
+            };
+        }
+        
+        //Si el valor de SentimientoEmocional es 5
+        if(event.sessionState.intent.slots.SentimientoEmocional.value.interpretedValue == 5) {
+            return {
+                "sessionState": {
+                    "dialogAction": {
+                        "type": "Close"
+                    },
+                    "intent": {
+                        "name": "Motivacion",
+                        "state": "Fulfilled"
+                    }
+                },
+                "messages": [{
+                    "contentType": "PlainText",
+                    "content": "Me alegra que te encuentres plenamente bien en tu estado emocional, ya que para aprender algo nuevo tienes que sentirte dispuesta emocionalmente también. "+
+                    "Estoy segura que te irá bien en la adquisición de nuevos conocimientos de ahora en adelante. De igual manera, no olvides que estoy acá para servirte :)."
+                }]
+            };
+        }
+        
+        //Si el valor de SentimientoEmocional es 1
+        else if(event.sessionState.intent.slots.SentimientoEmocional.value.interpretedValue == 1) {
+            return {
+                "sessionState": {
+                    "dialogAction": {
+                        "slotToElicit": "UtilidadVideo",
+                        "type": "ElicitSlot"
+                    },
+                "intent": {
+                    "name": "Motivacion",
+                    "state": "InProgress"
+                    }
+                },
+                "messages": [{
+                    "contentType": "PlainText",
+                    "content": "Mira este video que te puede servir en estos momentos" +
+                    "video de meditación" + " Te sirvió el video mandado? Sí o No"
+                }]
+            };
+        }
+        
+        //Si el valor de SentimientoEmocional es 2
+        else if(event.sessionState.intent.slots.SentimientoEmocional.value.interpretedValue == 2) {
+            return {
+              "sessionState": {
+                  "dialogAction": {
+                      "slotToElicit": "UtilidadVideo",
+                      "type": "ElicitSlot"
+                  },
+                  "intent": {
+                      "name": "Motivacion",
+                      "state": "InProgress"
+                  }
+              },
+              "messages": [{
+                  "contentType": "PlainText",
+                  "content": "Mira este video que te puede servir en estos momentos: " +
+                  "https://www.youtube.com/watch?v=ABD1gIJeMiY"  + " Te sirvió el video mandado? Sí o No"
+              }]
+            };
+        }
+        
+        //Si el valor de SentimientoEmocional es 3
+        else if(event.sessionState.intent.slots.SentimientoEmocional.value.interpretedValue == 3) {
+            return {
+                "sessionState": {
+                    "dialogAction": {
+                        "slotToElicit": "UtilidadVideo",
+                        "type": "ElicitSlot"
+                    },
+                    "intent": {
+                        "name": "Motivacion",
+                        "state": "InProgress"
+                    }
+                },
+                "messages": [{
+                    "contentType": "PlainText",
+                    "content": "Mira este video que puede servirte en estos momentos: " +
+                    "https://www.youtube.com/watch?v=R5DZAvIHi9g"  + " Te sirvió el video mandado? Sí o No"
+                    }]
+                }
+            }
+        
+        //Si el valor de SentimientoEmocional es 4
+        else if(event.sessionState.intent.slots.SentimientoEmocional.value.interpretedValue == 4) {
+            return {
+              "sessionState": {
+                  "dialogAction": {
+                      "slotToElicit": "UtilidadVideo",
+                      "type": "ElicitSlot"
+                  },
+                  "intent": {
+                      "name": "Motivacion",
+                      "state": "Fulfilled"
+                  }
+              },
+              "messages": [{
+                  "contentType": "PlainText",
+                  "content": "Mira este video que puede servirte en estos momentos: " +
+                  "https://www.youtube.com/watch?v=-WDrt2P22vo"  + " Te sirvió el video mandado? Sí o No"
+                  }]
+            };
+        }
+        
+    }
+};

@@ -1,6 +1,7 @@
 exports.handler = async (event) => {
     const intentName = event.sessionState.intent.name;
     
+    //Recibir al usuario para luego derivarlo a las otras intenciones
     if(intentName == "Bienvenida") {
         const NombreUsuario = event.sessionState.intent.slots.Usuario.value.originalValue; //Nombre de usuario
         
@@ -17,69 +18,380 @@ exports.handler = async (event) => {
         };
     }
     
+    //Si quiere ayuda con los cursos
     if(intentName == "AyudaCursos") {
-      
-      //Si está vacío y el usuario aún no completa nada
-      if(event.sessionState.intent.slots.NivelComprension == null) {
-            return {
-                "sessionState": {
-                    "dialogAction" : {
-                        "slotToElicit": "NivelComprension",
-                        "type": "ElicitSlot"
+        
+        //Si ya ingresó qué tipo de material prefieren para estudiar: podcast, video o visual (adentro verifica cuál eligió)
+        if(event.sessionState.intent.slots.TipoComprension != null){
+            
+            //Si TipoComprension = contenido visual:
+            if(event.sessionState.intent.slots.TipoComprension.value.interpretedValue == "contenido visual"){
+                return {
+                    "sessionState": {
+                        "dialogAction": {
+                            "type": "Close" //Termina la función porque le dice que revise el apartado de cursos
+                        },
+                        "intent": {
+                            "name": "AyudaCursos",
+                            "state": "Fulfilled" //Como termina la función, por eso está en "Fulfilled"
+                        }
                     },
-                    "intent": {
-                        "name": "AyudaCursos",
-                        "state": "InProgress"
-                    }
-                },
-                "messages": [{
-                    "contentType": "PlainText",
-                    "content": "Del 1 al 5 ¿cuál crees que es tu nivel de comprensión de los contenidos?"
-                }]                
-            };
+                    "messages": [{
+                        "contentType": "PlainText",
+                        "content": "Este material te puede servir con el curso: https://miro.com/app/board/uXjVOrLOodY=/"
+                    }]
+                };
+            }
+            
+            //Si TipoComprension = podcast:
+            else if(event.sessionState.intent.slots.TipoComprension.value.interpretedValue == "podcast"){
+                
+                //Curso: Design Thinking
+                if(event.sessionState.intent.slots.Curso.value.interpretedValue == "Design Thinking"){
+                    return {
+                        "sessionState": {
+                            "dialogAction": {
+                                "type": "Close" //Termina la función porque le dice que revise el apartado de cursos
+                            },
+                            "intent": {
+                                "name": "AyudaCursos",
+                                "state": "Fulfilled" //Como termina la función, por eso está en "Fulfilled"
+                            }
+                        },
+                        "messages": [{
+                            "contentType": "PlainText",
+                            "content": "Este material te puede servir con el curso: " + 
+                            "https://open.spotify.com/episode/3I4XlXHrHGoeI7oxmdrivq?si=e1c4221269324787"
+                        }]
+                    };
+                }
+                
+                //Curso: Fundamentos de Diseño
+                else if(event.sessionState.intent.slots.Curso.value.interpretedValue == "Fundamentos de Diseño"){
+                    return {
+                        "sessionState": {
+                            "dialogAction": {
+                                "type": "Close" //Termina la función porque le dice que revise el apartado de cursos
+                            },
+                            "intent": {
+                                "name": "AyudaCursos",
+                                "state": "Fulfilled" //Como termina la función, por eso está en "Fulfilled"
+                            }
+                        },
+                        "messages": [{
+                            "contentType": "PlainText",
+                            "content": "Este material te puede servir con el curso: " + 
+                            "https://open.spotify.com/episode/1msADB0wMBqjclpZkQbywn?si=5deFG7eHQQiMhF7UpcfUWw"
+                        }]
+                    };
+                }
+                
+                //Curso: Responsive Design
+                else if(event.sessionState.intent.slots.Curso.value.interpretedValue == "Responsive Design"){
+                    return {
+                        "sessionState": {
+                            "dialogAction": {
+                                "type": "Close" //Termina la función porque le dice que revise el apartado de cursos
+                            },
+                            "intent": {
+                                "name": "AyudaCursos",
+                                "state": "Fulfilled" //Como termina la función, por eso está en "Fulfilled"
+                            }
+                        },
+                        "messages": [{
+                            "contentType": "PlainText",
+                            "content": "Este material te puede servir con el curso: " + 
+                            "https://open.spotify.com/episode/4i45eL5Z7H9Tp0cW27wNLQ?si=6b5fa31bb7614bb0"
+                        }]
+                    };
+                }
+                
+                //Curso: User Testing
+                else if(event.sessionState.intent.slots.Curso.value.interpretedValue == "User Testing"){
+                    return {
+                        "sessionState": {
+                            "dialogAction": {
+                                "type": "Close" //Termina la función porque le dice que revise el apartado de cursos
+                            },
+                            "intent": {
+                                "name": "AyudaCursos",
+                                "state": "Fulfilled" //Como termina la función, por eso está en "Fulfilled"
+                            }
+                        },
+                        "messages": [{
+                            "contentType": "PlainText",
+                            "content": "Este material te puede servir con el curso: " + 
+                            "https://open.spotify.com/episode/1D8SM8oEnV03p6vTepzGKX?si=JKuMDEzSTYCoTwDLSb2o_g"
+                        }]
+                    };
+                }
+                
+                //Curso: Brief
+                else if(event.sessionState.intent.slots.Curso.value.interpretedValue == "Brief"){
+                    return {
+                        "sessionState": {
+                            "dialogAction": {
+                                "type": "Close" //Termina la función porque le dice que revise el apartado de cursos
+                            },
+                            "intent": {
+                                "name": "AyudaCursos",
+                                "state": "Fulfilled" //Como termina la función, por eso está en "Fulfilled"
+                            }
+                        },
+                        "messages": [{
+                            "contentType": "PlainText",
+                            "content": "Este material te puede servir con el curso: " + 
+                            "https://open.spotify.com/episode/4ncmHGnSKlJ5RfJGTi7PlA?si=d587ilsiR8yFQUpZOl5p3g"
+                        }]
+                    };
+                }
+                
+                //Curso: Prototipado
+                else if(event.sessionState.intent.slots.Curso.value.interpretedValue == "Prototipado"){
+                    return {
+                        "sessionState": {
+                            "dialogAction": {
+                                "type": "Close" //Termina la función porque le dice que revise el apartado de cursos
+                            },
+                            "intent": {
+                                "name": "AyudaCursos",
+                                "state": "Fulfilled" //Como termina la función, por eso está en "Fulfilled"
+                            }
+                        },
+                        "messages": [{
+                            "contentType": "PlainText",
+                            "content": "Este material te puede servir con el curso: " + 
+                            "https://open.spotify.com/episode/1W4dQbbYgwaK85oxfMtTeV?si=ik0-MqyYTSeD0SF4kuOd9A"
+                        }]
+                    };
+                }
+                
+                //Curso: Pruebas de Usabilidad
+                else if(event.sessionState.intent.slots.Curso.value.interpretedValue == "Pruebas de Usabilidad"){
+                    return {
+                        "sessionState": {
+                            "dialogAction": {
+                                "type": "Close" //Termina la función porque le dice que revise el apartado de cursos
+                            },
+                            "intent": {
+                                "name": "AyudaCursos",
+                                "state": "Fulfilled" //Como termina la función, por eso está en "Fulfilled"
+                            }
+                        },
+                        "messages": [{
+                            "contentType": "PlainText",
+                            "content": "Este material te puede servir con el curso: " + 
+                            "https://open.spotify.com/episode/3YlndVRFDWhERSlaY9vGEZ?si=kFjzhNY4S7yumKotBwK5Cw"
+                        }]
+                    };
+                }
+                
+                //Curso: Métodos redacción de entrevistas
+                else if(event.sessionState.intent.slots.Curso.value.interpretedValue == "Métodos redacción de entrevistas"){
+                    return {
+                        "sessionState": {
+                            "dialogAction": {
+                                "type": "Close" //Termina la función porque le dice que revise el apartado de cursos
+                            },
+                            "intent": {
+                                "name": "AyudaCursos",
+                                "state": "Fulfilled" //Como termina la función, por eso está en "Fulfilled"
+                            }
+                        },
+                        "messages": [{
+                            "contentType": "PlainText",
+                            "content": "Este material te puede servir con el curso: " + 
+                            "https://open.spotify.com/episode/70OQs91dTcIroHuPIGjZ96?si=3qLaVG1iTKWExiO1hQ4xig"
+                        }]
+                    };
+                }
+                
+                //Curso: Desarrollo de style guide
+                else if(event.sessionState.intent.slots.Curso.value.interpretedValue == "Desarrollo de style guide"){
+                    return {
+                        "sessionState": {
+                            "dialogAction": {
+                                "type": "Close" //Termina la función porque le dice que revise el apartado de cursos
+                            },
+                            "intent": {
+                                "name": "AyudaCursos",
+                                "state": "Fulfilled" //Como termina la función, por eso está en "Fulfilled"
+                            }
+                        },
+                        "messages": [{
+                            "contentType": "PlainText",
+                            "content": "Este material te puede servir con el curso: " + 
+                            "https://open.spotify.com/episode/67kHGrXbic4aZmeqCOEh46?si=njC0iRMsTtuBXvX4SjjYqw"
+                        }]
+                    };
+                }
+                
+                //Curso: Atomic Design
+                else if(event.sessionState.intent.slots.Curso.value.interpretedValue == "Atomic Design"){
+                    return {
+                        "sessionState": {
+                            "dialogAction": {
+                                "type": "Close" //Termina la función porque le dice que revise el apartado de cursos
+                            },
+                            "intent": {
+                                "name": "AyudaCursos",
+                                "state": "Fulfilled" //Como termina la función, por eso está en "Fulfilled"
+                            }
+                        },
+                        "messages": [{
+                            "contentType": "PlainText",
+                            "content": "Este material te puede servir con el curso: " + 
+                            "https://open.spotify.com/episode/5xe1yQ9m9rUHyXseA4knMO?si=dWT-eUIoSuyY0m2_801eTg"
+                        }]
+                    };
+                }
+                
+                //Curso: Elaboración de flujos y mapeo de casuísticas
+                else if(event.sessionState.intent.slots.Curso.value.interpretedValue == "Elaboración de flujos y mapeo de casuísticas"){
+                    return {
+                        "sessionState": {
+                            "dialogAction": {
+                                "type": "Close" //Termina la función porque le dice que revise el apartado de cursos
+                            },
+                            "intent": {
+                                "name": "AyudaCursos",
+                                "state": "Fulfilled" //Como termina la función, por eso está en "Fulfilled"
+                            }
+                        },
+                        "messages": [{
+                            "contentType": "PlainText",
+                            "content": "Este material te puede servir con el curso: " + 
+                            "https://open.spotify.com/episode/0mcOv3vppDks32P2owV46v?si=0xslbiVjS4OZwcVNMthw8w"
+                        }]
+                    };
+                }
+                
+                //Curso:Design Systems
+                else if(event.sessionState.intent.slots.Curso.value.interpretedValue == "Design Systems"){
+                    return {
+                        "sessionState": {
+                            "dialogAction": {
+                                "type": "Close" //Termina la función porque le dice que revise el apartado de cursos
+                            },
+                            "intent": {
+                                "name": "AyudaCursos",
+                                "state": "Fulfilled" //Como termina la función, por eso está en "Fulfilled"
+                            }
+                        },
+                        "messages": [{
+                            "contentType": "PlainText",
+                            "content": "Este material te puede servir con el curso: " + 
+                            "https://open.spotify.com/episode/5uFJYcFm3lkpBUY0FM3uXh?si=ik8CD5qgQ82UViQlNRPYmw"
+                        }]
+                    };
+                }
+                
+                //Curso:Service Design
+                else if(event.sessionState.intent.slots.Curso.value.interpretedValue == "Service Design"){
+                    return {
+                        "sessionState": {
+                            "dialogAction": {
+                                "type": "Close" //Termina la función porque le dice que revise el apartado de cursos
+                            },
+                            "intent": {
+                                "name": "AyudaCursos",
+                                "state": "Fulfilled" //Como termina la función, por eso está en "Fulfilled"
+                            }
+                        },
+                        "messages": [{
+                            "contentType": "PlainText",
+                            "content": "Este material te puede servir con el curso: " + 
+                            "https://open.spotify.com/episode/3KQk34uYwBhUP2fxEZY9t8?si=qHuwMXcRTkO7bzjpo-7cUA"
+                        }]
+                    };
+                }
+                
+                //Curso:Customer Experience
+                else if(event.sessionState.intent.slots.Curso.value.interpretedValue == "Customer Experience"){
+                    return {
+                        "sessionState": {
+                            "dialogAction": {
+                                "type": "Close" //Termina la función porque le dice que revise el apartado de cursos
+                            },
+                            "intent": {
+                                "name": "AyudaCursos",
+                                "state": "Fulfilled" //Como termina la función, por eso está en "Fulfilled"
+                            }
+                        },
+                        "messages": [{
+                            "contentType": "PlainText",
+                            "content": "Este material te puede servir con el curso: " + 
+                            "https://open.spotify.com/episode/0EFaD75sSdUYzybx2QmKGM?si=LV_vevfSQ3-fAkQ5DE-7Ug"
+                        }]
+                    };
+                }
+            }
+            
+            else if(event.sessionState.intent.slots.TipoComprension.value.interpretedValue == "video" && event.sessionState.intent.slots.Curso.value.interpretedValue == "Customer Experience"){
+                return {
+                    "sessionState": {
+                        "dialogAction": {
+                            "type": "Close" 
+                        },
+                        "intent": {
+                            "name": "AyudaCursos",
+                            "state": "Fulfilled" //Como termina la función, por eso está en "Fulfilled"
+                        }
+                    },
+                    "messages": [{
+                        "contentType": "PlainText",
+                        "content": "Este material te puede servir con el curso: " + 
+                        "https://open.spotify.com/episode/0EFaD75sSdUYzybx2QmKGM?si=LV_vevfSQ3-fAkQ5DE-7Ug"
+                    }]
+                };
+            }
+                
         }
         
-        //Si el nivel de comprensión es 5, le dice el mensaje
-        if(event.sessionState.intent.slots.NivelComprension.value.interpretedValue == 5){
-            return {
-                "sessionState": {
-                    "dialogAction": {
-                        "type": "Close" //Como dice que entiende todo, se termina ahí la intención
+        //Si ya ingresó si prefieren estudiar en grupo o sola (adentro verifica cuál eligió)
+        if(event.sessionState.intent.slots.TipoEstudio != null){
+            
+            //Si prefiere estudiar en grupo (eligió la opción para grupo)
+            if(event.sessionState.intent.slots.TipoEstudio.value.interpretedValue == "grupo"){
+                return {
+                    "sessionState": {
+                        "dialogAction": {
+                            "type": "Close" //Termina la función porque le dice que revise el apartado de cursos
+                        },
+                        "intent": {
+                            "name": "AyudaCursos",
+                            "state": "Fulfilled" //Como termina la función, por eso está en "Fulfilled"
+                        }
                     },
-                    "intent": {
-                        "name": "AyudaCursos",
-                        "state": "Fulfilled" //Terminó la intención, por eso está en fulfilled
-                    }
-                },
-                "messages": [{
-                    "contentType": "PlainText",
-                    "content": "Ya veo amiga me alegra que estés comprendiendo de manera exitosa tu curso. "+
-                    " Asimismo, no olvides llevar a la par tus conocimientos en las Plataformas E-learning. " +
-                    "No olvides que estoy acá para servirte :)."
-                }]
-            };
-        }
-        
-        //Si responde que su nivel de comprensión está en el rango de 1 a 4
-        else if(event.sessionState.slots.NivelComprension.value.interpretedValue < 5 && event.sessionState.slots.NivelComprension.value.interpretedValue >= 1){
-            return {
-                "sessionState": {
-                    "dialogAction": {
-                        "slotToElicit": "Curso",
-                        "type": "ElicitSlot"
+                    "messages": [{
+                        "contentType": "PlainText",
+                        "content": "TE QUEREMOS MENCIONAR QUE EN EL APARTADO DEL CURSO INSCRITO EXISTE UN BOTÓN DE GRUPO, EN EL CUAL PUEDES VER A OTRAS " +
+                        "CHICAS QUE ESTÁN EN EL MISMO TÓPICO Y Podrían ENTABLAR UNA COMUNICACIÓN CON EL FIN DE REFORZAR ALGUNAS DUDAS."
+                    }]
+                };
+            }
+            
+            //Si prefiere estudiar sola, pide elegir el tipo de comprensión (podcast, video, contenido visual)
+            else if(event.sessionState.intent.slots.TipoEstudio.value.interpretedValue == "sola"){
+                return {
+                    "sessionState": {
+                        "dialogAction" : {
+                            "slotToElicit": "TipoComprension",
+                            "type": "ElicitSlot"
+                        },
+                        "intent": {
+                            "name": "AyudaCursos",
+                            "state": "InProgress"
+                        }
                     },
-                    "intent": {
-                        "name": "AyudaCursos",
-                        "state": "InProgress" //Aún no termina la intención, por eso está InProgress
-                    }
-                },
-                "messages": [{
-                    "contentType": "PlainText",
-                    "content": "Cuál fue el curso que te causó mayor dificultad?"
-                }]
-            };
+                    "messages": [{
+                        "contentType": "PlainText",
+                        "content": "cómo te gustaría reforzar lo aprendido. Tal vez un podcast, un video o un contenido visual te podría ayudar comentame cual te gustaría."
+                    }]
+                };            
+            }
         }
-        
+    
         //Si ya ingresó el nombre del curso, que te pida cómo prefiere estudiar
         if(event.sessionState.intent.slots.Curso != null){
             return {
@@ -100,9 +412,70 @@ exports.handler = async (event) => {
                 }]
             };
         }
+      
+        //Si está vacío y el usuario aún no completa nada
+        if(event.sessionState.intent.slots.NivelComprension == null) {
+            return {
+                "sessionState": {
+                    "dialogAction" : {
+                        "slotToElicit": "NivelComprension",
+                        "type": "ElicitSlot"
+                    },
+                    "intent": {
+                        "name": "AyudaCursos",
+                        "state": "InProgress"
+                    }
+                },
+                "messages": [{
+                    "contentType": "PlainText",
+                    "content": "Del 1 al 5 ¿cuál crees que es tu nivel de comprensión de los contenidos?"
+                }]                
+            };
+        }
         
+        //Si el nivel de comprensión es 5, le dice el mensaje
+        else if(event.sessionState.intent.slots.NivelComprension.value.interpretedValue == 5){
+            return {
+                "sessionState": {
+                    "dialogAction": {
+                        "type": "Close" //Como dice que entiende todo, se termina ahí la intención
+                    },
+                    "intent": {
+                        "name": "AyudaCursos",
+                        "state": "Fulfilled" //Terminó la intención, por eso está en fulfilled
+                    }
+                },
+                "messages": [{
+                    "contentType": "PlainText",
+                    "content": "Ya veo amiga me alegra que estés comprendiendo de manera exitosa tu curso. "+
+                    " Asimismo, no olvides llevar a la par tus conocimientos en las Plataformas E-learning. " +
+                    "No olvides que estoy acá para servirte :)."
+                }]
+            };
+        }
+        
+        //Si responde que su nivel de comprensión está en el rango de 1 a 4
+        else if(event.sessionState.intent.slots.NivelComprension.value.interpretedValue < 5 && event.sessionState.intent.slots.NivelComprension.value.interpretedValue >= 1){
+            return {
+                "sessionState": {
+                    "dialogAction": {
+                        "slotToElicit": "Curso",
+                        "type": "ElicitSlot"
+                    },
+                    "intent": {
+                        "name": "AyudaCursos",
+                        "state": "InProgress" //Aún no termina la intención, por eso está InProgress
+                    }
+                },
+                "messages": [{
+                    "contentType": "PlainText",
+                    "content": "Cuál fue el curso que te causó mayor dificultad?"
+                }]
+            };
+        }
+       
         //Si prefiere estudiar en grupo (eligió la opción para grupo)
-        if(event.sessionState.intent.slots.TipoEstudio.value.interpretedValue == "Grupo"){
+        if(event.sessionState.intent.slots.TipoEstudio.value.interpretedValue == "grupo"){
             return {
                 "sessionState": {
                     "dialogAction": {
@@ -121,39 +494,99 @@ exports.handler = async (event) => {
             };
         }
         
-        //Si prefiere estudiar sola, pide elegir el tipo de comprensión (podcast, video, contenido visual)
-        if(event.sessionState.intent.slots.TipoEstudio.value.interpretedValue == "Sola"){
-            return {
-                "sessionState": {
-                    "dialogAction" : {
-                        "slotToElicit": "TipoComprension",
-                        "type": "ElicitSlot"
-                    },
-                    "intent": {
-                        "name": "AyudaCursos",
-                        "state": "InProgress"
-                    }
-                },
-                "messages": [{
-                    "contentType": "PlainText",
-                    "content": "cómo te gustaría reforzar lo aprendido. Tal vez un podcast, un video o un contenido visual te podría ayudar comentame cual te gustaría."
-                }]
-            };            
-        }
-        
-        //Respuesta Final: Mandar el contenido según el curso y tipo de contenido
-        if(event.sessionState.intent.slots.TipoComprension != null){
-            //Variables para el diccionario
-            const contenidofinal = event.sessionState.intent.slots.TipoComprension.value.interpretedValue; //TipoComprensión elegido
-            const nombrecurso = event.sessionState.intent.slots.Curso.value.interpretedValue; //Curso elegido
-            
-            
-            
-        }
-        
     }
     
+    //Si necesita/quiere motivación
     if (intentName == "Motivacion") {
+        
+        //Cuando el usuario ingresó si prefiere un coach o un psicólogo
+        if(event.sessionState.intent.slots.CoachPsicologo != null){
+             
+            //Si prefieren que los ayude un coach
+            if(event.sessionState.intent.slots.CoachPsicologo.value.interpretedValue == "coach") {
+                return {
+                    "sessionState": {
+                        "dialogAction" : {
+                            "type": "Close"
+                        },
+                        "intent": {
+                            "name": "Motivacion",
+                            "state": "Fulfilled"
+                        },
+                    },
+                    "messages":[{
+                        "contentType": "PlainText",
+                        "content": "Te recomendamos que consultes a este grupo de profesionales en coaching que están dispuestos a servirte en todo momento :) " +
+                        "Ingresa al siguiente link: https://icfperu.pe/directorio-coach/"
+                    }]
+                };
+            }
+             
+            else if(event.sessionState.intent.slots.CoachPsicologo.value.interpretedValue == "psicólogo") {
+                return {
+                    "sessionState": {
+                        "dialogAction" : {
+                            "type": "Close"
+                        },
+                        "intent": {
+                            "name": "Motivacion",
+                            "state": "Fulfilled"
+                        },
+                    },
+                    "messages":[{
+                        "contentType": "PlainText",
+                        "content": "Te recomendamos visitar la página de Primeros auxilios psicológicos que brinda la Universidada Continental, te podrán ayudar de forma gratuita a resolver tus problemas :) " +
+                        "Ingresa al siguiente link: https://ucontinental.edu.pe/atencion-de-primeros-auxilios-psicologicos-online/#:~:text=Los%20%C2%ABPrimeros%20Auxilios%20Psicol%C3%B3gicos%20(PAP,%2C%20denominados%20%E2%80%9Cconsultorios%20virtuales%E2%80%9D."
+                    }]
+                };
+            }
+             
+        }
+        
+        //Cuando ya ingresó si el video fue útil o no:
+        if(event.sessionState.intent.slots.UtilidadVideo != null){
+            
+            //Si el valor de UtilidadVideo == SI, confirman que les servió el video
+            if(event.sessionState.intent.slots.UtilidadVideo.value.interpretedValue == "Si" ) {
+                return {
+                    "sessionState": {
+                        "dialogAction" : {
+                            "type": "Close"
+                        },
+                        "intent": {
+                            "name": "Motivacion",
+                            "state": "Fulfilled"
+                        },
+                    },
+                    "messages":[{
+                        "contentType": "PlainText",
+                        "content": "Que bueno que te haya servido el material que escogimos para ti. Recuerda que estoy para servirte :)"
+                    }]
+                };
+            }
+            
+            //Si no les sirvió el video (video = No), pasar a preguntar para lo de coach o psicologo
+            else if(event.sessionState.intent.slots.UtilidadVideo.value.interpretedValue == "No" ) {
+                return {
+                    "sessionState": {
+                        "dialogAction" : {
+                            "slotToElicit": "CoachPsicologo",
+                            "type": "ElicitSlot"
+                        },
+                        "intent": {
+                            "name": "Motivacion",
+                            "state": "InProgress"
+                        },
+                    },
+                    "messages":[{
+                        "contentType": "PlainText",
+                        "content": "como te gustaria ser acompañada para sobrellevar este momento en el que te encuentras. ¿Te gustaría un coach o un psicólogo?"
+                    }]
+                };
+            }
+            
+        }
+        
         //Cuando el usuario aún no ha ingresado nada
         if(event.sessionState.intent.slots.SentimientoEmocional == null) {
             return {
@@ -171,85 +604,6 @@ exports.handler = async (event) => {
                     "contentType": "PlainText",
                     "content": "Del 1 al 5 como te sientes emocionalmente en este punto de tu vida "
                 }]                
-            };
-        }
-        
-        //Si el valor de UtilidadVideo == SI, confirman que les servió el video
-        if(event.sessionState.intent.slots.UtilidadVideo.value.interpretedValue == "Si" ) {
-            return {
-                "sessionState": {
-                    "dialogAction" : {
-                        "type": "Close"
-                    },
-                    "intent": {
-                        "name": "Motivacion",
-                        "state": "Fulfilled"
-                    },
-                },
-                "messages":[{
-                    "contentType": "PlainText",
-                    "content": "Que bueno que te haya servido el material que escogimos para ti. Recuerda que estoy para servirte :)"
-                }]
-            };
-        }
-        
-        //Si no les sirvió el video (video = No), pasar a preguntar para lo de coach o psicologo
-        else if(event.sessionState.intent.slots.UtilidadVideo.value.interpretedValue == "No" ) {
-            return {
-                "sessionState": {
-                    "dialogAction" : {
-                        "slotToElicit": "CoachPsicologo",
-                        "type": "ElicitSlot"
-                    },
-                    "intent": {
-                        "name": "Motivacion",
-                        "state": "InProgress"
-                    },
-                },
-                "messages":[{
-                    "contentType": "PlainText",
-                    "content": "como te gustaria ser acompañada para sobrellevar este momento en el que te encuentras. ¿Te gustaría un coach o un psicólogo?"
-                }]
-            };
-        }
-        
-        //Si prefieren que los ayude un coach
-        if(event.sessionState.intent.slots.CoachPsicologo.value.interpretedValue == "Coach") {
-            return {
-                "sessionState": {
-                    "dialogAction" : {
-                        "type": "Close"
-                    },
-                    "intent": {
-                        "name": "Motivacion",
-                        "state": "Fulfilled"
-                    },
-                },
-                "messages":[{
-                    "contentType": "PlainText",
-                    "content": "Te recomendamos que consultes a este grupo de profesionales en coaching que están dispuestos a servirte en todo momento :) " +
-                    "Ingresa al siguiente link: https://icfperu.pe/directorio-coach/"
-                }]
-            };
-        }
-        
-        //Si prefieren que los ayude un psicologo
-        else if(event.sessionState.intent.slots.CoachPsicologo.value.interpretedValue == "Psicologo") {
-            return {
-                "sessionState": {
-                    "dialogAction" : {
-                        "type": "Close"
-                    },
-                    "intent": {
-                        "name": "Motivacion",
-                        "state": "Fulfilled"
-                    },
-                },
-                "messages":[{
-                    "contentType": "PlainText",
-                    "content": "Te recomendamos visitar la página de Primeros auxilios psicológicos que brinda la Universidada Continental, te podrán ayudar de forma gratuita a resolver tus problemas :) " +
-                    "Ingresa al siguiente link: https://ucontinental.edu.pe/atencion-de-primeros-auxilios-psicologicos-online/#:~:text=Los%20%C2%ABPrimeros%20Auxilios%20Psicol%C3%B3gicos%20(PAP,%2C%20denominados%20%E2%80%9Cconsultorios%20virtuales%E2%80%9D."
-                }]
             };
         }
         
@@ -354,6 +708,25 @@ exports.handler = async (event) => {
                   "content": "Mira este video que puede servirte en estos momentos: " +
                   "https://www.youtube.com/watch?v=-WDrt2P22vo"  + " Te sirvió el video mandado? Sí o No"
                   }]
+            };
+        }
+        
+        //Si el valor de UtilidadVideo == SI, confirman que les servió el video
+        if(event.sessionState.intent.slots.UtilidadVideo.value.interpretedValue == "Si" ) {
+            return {
+                "sessionState": {
+                    "dialogAction" : {
+                        "type": "Close"
+                    },
+                    "intent": {
+                        "name": "Motivacion",
+                        "state": "Fulfilled"
+                    },
+                },
+                "messages":[{
+                    "contentType": "PlainText",
+                    "content": "Que bueno que te haya servido el material que escogimos para ti. Recuerda que estoy para servirte :)"
+                }]
             };
         }
         

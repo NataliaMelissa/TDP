@@ -345,6 +345,27 @@ exports.handler = async (event) => {
                     }]
                 };
             }
+            
+            //Si ingresa algo diferente de contenido visual, podcast, video
+            else{
+                return {
+                    "sessionState": {
+                        "dialogAction" : {
+                            "slotToElicit": "TipoComprension",
+                            "type": "ElicitSlot"
+                        },
+                        "intent": {
+                            "name": "AyudaCursos",
+                            "state": "InProgress"
+                        }
+                    },
+                    "messages": [{
+                        "contentType": "PlainText",
+                        "content": "Lo siento no te entendí, para poder ayudarte el material debe ser Contenido Visual, podcast o video."
+                        //"Ingresa nuevamente cómo quieres reforzar lo aprendido: contenido visual, podcast o video."
+                    }]
+                };        
+            }
                 
         }
         
@@ -356,17 +377,19 @@ exports.handler = async (event) => {
                 return {
                     "sessionState": {
                         "dialogAction": {
-                            "type": "Close" //Termina la función porque le dice que revise el apartado de cursos
+                            "slotToElicit": "TipoComprension",
+                            "type": "ElicitSlot"
                         },
                         "intent": {
                             "name": "AyudaCursos",
-                            "state": "Fulfilled" //Como termina la función, por eso está en "Fulfilled"
+                            "state": "InProgress" //Aún no termina la intención, por eso está "InProgress"
                         }
                     },
                     "messages": [{
                         "contentType": "PlainText",
                         "content": "TE QUEREMOS MENCIONAR QUE EN EL APARTADO DEL CURSO INSCRITO EXISTE UN BOTÓN DE GRUPO, EN EL CUAL PUEDES VER A OTRAS " +
-                        "CHICAS QUE ESTÁN EN EL MISMO TÓPICO Y Podrían ENTABLAR UNA COMUNICACIÓN CON EL FIN DE REFORZAR ALGUNAS DUDAS."
+                        "CHICAS QUE ESTÁN EN EL MISMO TÓPICO Y Podrían ENTABLAR UNA COMUNICACIÓN CON EL FIN DE REFORZAR ALGUNAS DUDAS." + 
+                        " De igual manera. Tal vez un podcast, un video o un contenido visual te podría ayudar comentame cual te gustaría?"
                     }]
                 };
             }
@@ -390,6 +413,27 @@ exports.handler = async (event) => {
                     }]
                 };            
             }
+            
+            //Si ingresa un valor no válido (ni sola ni en grupo)
+            else{
+               return {
+                    "sessionState": {
+                        "dialogAction" : {
+                            "slotToElicit": "TipoEstudio",
+                            "type": "ElicitSlot"
+                        },
+                        "intent": {
+                            "name": "AyudaCursos",
+                            "state": "InProgress"
+                        }
+                    },
+                    "messages": [{
+                        "contentType": "PlainText",
+                        "content": "Lo siento, sólo se puede estudiar en grupo o sola, ingresa si prefieres repasar en grupo o sola"
+                    }]
+                }; 
+            }
+
         }
     
         //Si ya ingresó el nombre del curso, que te pida cómo prefiere estudiar
@@ -473,23 +517,23 @@ exports.handler = async (event) => {
                 }]
             };
         }
-       
-        //Si prefiere estudiar en grupo (eligió la opción para grupo)
-        if(event.sessionState.intent.slots.TipoEstudio.value.interpretedValue == "grupo"){
-            return {
+        
+       //Si el valor de NivelComprension está fuera del rango del 1-5
+        else{
+             return {
                 "sessionState": {
                     "dialogAction": {
-                        "type": "Close" //Termina la función porque le dice que revise el apartado de cursos
+                        "slotToElicit": "NivelComprension",
+                        "type": "ElicitSlot"
                     },
                     "intent": {
                         "name": "AyudaCursos",
-                        "state": "Fulfilled" //Como termina la función, por eso está en "Fulfilled"
+                        "state": "InProgress" //Aún no termina la intención, por eso está InProgress
                     }
                 },
                 "messages": [{
                     "contentType": "PlainText",
-                    "content": "TE QUEREMOS MENCIONAR QUE EN EL APARTADO DEL CURSO INSCRITO EXISTE UN BOTÓN DE GRUPO, EN EL CUAL PUEDES VER A OTRAS " +
-                    "CHICAS QUE ESTÁN EN EL MISMO TÓPICO Y Podrían ENTABLAR UNA COMUNICACIÓN CON EL FIN DE REFORZAR ALGUNAS DUDAS."
+                    "content": "Lo siento, ingresa tu nivel de comprensión en el rango del 1 al 5 para poder ayudarte."
                 }]
             };
         }
@@ -521,7 +565,8 @@ exports.handler = async (event) => {
                     }]
                 };
             }
-             
+            
+            //Si prefieren que los ayude un psicólogo 
             else if(event.sessionState.intent.slots.CoachPsicologo.value.interpretedValue == "psicólogo") {
                 return {
                     "sessionState": {
@@ -537,6 +582,26 @@ exports.handler = async (event) => {
                         "contentType": "PlainText",
                         "content": "Te recomendamos visitar la página de Primeros auxilios psicológicos que brinda la Universidada Continental, te podrán ayudar de forma gratuita a resolver tus problemas :) " +
                         "Ingresa al siguiente link: https://ucontinental.edu.pe/atencion-de-primeros-auxilios-psicologicos-online/#:~:text=Los%20%C2%ABPrimeros%20Auxilios%20Psicol%C3%B3gicos%20(PAP,%2C%20denominados%20%E2%80%9Cconsultorios%20virtuales%E2%80%9D."
+                    }]
+                };
+            }
+            
+            //Si ingresan un valor que no sea coach o psicologo
+            else{
+                return {
+                    "sessionState": {
+                        "dialogAction" : {
+                            "slotToElicit": "CoachPsicologo",
+                            "type": "ElicitSlot"
+                        },
+                        "intent": {
+                            "name": "Motivacion",
+                            "state": "Fulfilled"
+                        },
+                    },
+                    "messages":[{
+                        "contentType": "PlainText",
+                        "content": "No entiendo, debes indicarme si prefieres un psicólogo o un coach. Ingresa de nuevo el tipo de ayuda que prefieres: coach o psicólogo"
                     }]
                 };
             }
@@ -581,6 +646,26 @@ exports.handler = async (event) => {
                     "messages":[{
                         "contentType": "PlainText",
                         "content": "como te gustaria ser acompañada para sobrellevar este momento en el que te encuentras. ¿Te gustaría un coach o un psicólogo?"
+                    }]
+                };
+            }
+            
+            //Si ingresaron un valor no válido (diferente de sí o no)
+            else {
+                return {
+                    "sessionState": {
+                        "dialogAction" : {
+                            "slotToElicit": "UtilidadVideo",
+                            "type": "ElicitSlot"
+                        },
+                        "intent": {
+                            "name": "Motivacion",
+                            "state": "InProgress"
+                        },
+                    },
+                    "messages":[{
+                        "contentType": "PlainText",
+                        "content": "Lo siento, debes decirme si el video fue de utilidad o no. Encontraste el video útil: sí o no?"
                     }]
                 };
             }
@@ -711,21 +796,22 @@ exports.handler = async (event) => {
             };
         }
         
-        //Si el valor de UtilidadVideo == SI, confirman que les servió el video
-        if(event.sessionState.intent.slots.UtilidadVideo.value.interpretedValue == "Si" ) {
+        //Si el valor de SentimientoEmocional está fuera del rango del 1-5
+        else {
             return {
                 "sessionState": {
                     "dialogAction" : {
-                        "type": "Close"
+                        "slotToElicit": "SentimientoEmocional",
+                        "type": "ElicitSlot"
                     },
                     "intent": {
                         "name": "Motivacion",
-                        "state": "Fulfilled"
+                        "state": "InProgress"
                     },
                 },
                 "messages":[{
                     "contentType": "PlainText",
-                    "content": "Que bueno que te haya servido el material que escogimos para ti. Recuerda que estoy para servirte :)"
+                    "content": "Lo siento, el valor debe ser dentro del rango para poder ayudarte. Del 1 al 5 como te sientes emocionalmente en este punto de tu vida?"
                 }]
             };
         }

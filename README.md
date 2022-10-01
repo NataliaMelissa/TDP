@@ -36,7 +36,7 @@ Para este sprint, el desarrollo del chatbot y los lambda se tuvo ayuda de Marco 
 - AyudaCurso: la persona necesita ayuda con los cursos, el chatbot le envía información para que le ayude a repasar los cursos.
 - Motivación: la persona necesita un poco de motivación/ayuda porque está muy estresada, cansada, etc.
 
-**Slots del Bot: ** slots son el input que recibe el chatbot y tienen un tipo de dato, son como las variables.
+**Slots del Bot:** slots son el input que recibe el chatbot y tienen un tipo de dato, son como las variables.
 - Slots intención Bienvenida:
   - Usuario: es de tipo alphanumérica y recibe el nombre de usuario de la persona hablando con el Bot.
   

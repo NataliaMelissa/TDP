@@ -1,0 +1,200 @@
+import utils from "./utils.js";
+
+
+const levelOpt = [
+  'Del 1 al 5 ¿cuál crees que es tu nivel de comprensión de los contenidos?',
+  'Ya veo amiga me alegra que estés comprendiendo de manera exitosa tu curso. Asimismo, no olvides llevar a la par tus conocimientos en las Plataformas E-learning.No olvides que estoy acá para servirte :).',
+  '¿Cuál fue el curso que te causó mayor dificultad?',
+  'Lo siento, ingresa tu nivel de comprensión en el rango del 1 al 5 para poder ayudarte.'
+]
+
+const courseOpt = [
+  'Ya veo para mejorar tu experiencia de usuario dentro de la aplicación, me gustaria saber como te sientes más cómoda aprendiendo en grupo o sola?'
+]
+
+const studyTypeOpt = [
+  'Te queremos mencionar que en el apartado del curso inscrito existe un botón de grupo, en el cual puedes ver a otras chicas que están en el mismo tópico y podrían entablar una comunicación con el fin de resolver algunas dudas. De igual manera. Tal vez un podcast, un video o un contenido visual te podría ayudar comentame cual te gustaría?',
+  'cómo te gustaría reforzar lo aprendido. Tal vez un podcast, un video o un contenido visual te podría ayudar comentame cual te gustaría.',
+  'Lo siento, sólo se puede estudiar en grupo o sola, ingresa si prefieres repasar en grupo o sola'
+]
+
+const understandTypeOpt = {
+  visualContain: 'Este material te puede servir con el curso: https://miro.com/app/board/uXjVOrLOodY=/',
+  podcast: [
+    'Este material te puede servir con el curso: https://open.spotify.com/episode/3I4XlXHrHGoeI7oxmdrivq?si=e1c4221269324787', // Design Thinking
+    'Este material te puede servir con el curso: https://open.spotify.com/episode/1msADB0wMBqjclpZkQbywn?si=5deFG7eHQQiMhF7UpcfUWw', //Fundamentos de Diseño
+    'Este material te puede servir con el curso: https://open.spotify.com/episode/4i45eL5Z7H9Tp0cW27wNLQ?si=6b5fa31bb7614bb0', // Responsive Design
+    'Este material te puede servir con el curso: "https://open.spotify.com/episode/1D8SM8oEnV03p6vTepzGKX?si=JKuMDEzSTYCoTwDLSb2o_g', //User Testing
+    'Este material te puede servir con el curso: https://open.spotify.com/episode/4ncmHGnSKlJ5RfJGTi7PlA?si=d587ilsiR8yFQUpZOl5p3g', // Brief
+    'Este material te puede servir con el curso: https://open.spotify.com/episode/1W4dQbbYgwaK85oxfMtTeV?si=ik0-MqyYTSeD0SF4kuOd9A',// Prototipado
+    'Este material te puede servir con el curso: https://open.spotify.com/episode/3YlndVRFDWhERSlaY9vGEZ?si=kFjzhNY4S7yumKotBwK5Cw',// Pruebas de Usabilidad
+    'Este material te puede servir con el curso: https://open.spotify.com/episode/70OQs91dTcIroHuPIGjZ96?si=3qLaVG1iTKWExiO1hQ4xig',// Métodos redacción de entrevistas
+    'Este material te puede servir con el curso: https://open.spotify.com/episode/67kHGrXbic4aZmeqCOEh46?si=njC0iRMsTtuBXvX4SjjYqw',// Desarrollo de style guide
+    'Este material te puede servir con el curso: https://open.spotify.com/episode/5xe1yQ9m9rUHyXseA4knMO?si=dWT-eUIoSuyY0m2_801eTg',// Atomic Design
+    'Este material te puede servir con el curso: https://open.spotify.com/episode/0mcOv3vppDks32P2owV46v?si=0xslbiVjS4OZwcVNMthw8w',// Elaboración de flujos y mapeo de casuísticas
+    'Este material te puede servir con el curso: https://open.spotify.com/episode/5uFJYcFm3lkpBUY0FM3uXh?si=ik8CD5qgQ82UViQlNRPYmw',// Design Systems
+    'Este material te puede servir con el curso: https://open.spotify.com/episode/3KQk34uYwBhUP2fxEZY9t8?si=qHuwMXcRTkO7bzjpo-7cUA',// Service Design
+    'Este material te puede servir con el curso: https://open.spotify.com/episode/0EFaD75sSdUYzybx2QmKGM?si=LV_vevfSQ3-fAkQ5DE-7Ug',// Customer Experience
+  ],
+  video: [
+    'Este material te puede servir con el curso: https://www.youtube.com/watch?v=_H33tA2-j0s', //Design Thinking
+    'Este material te puede servir con el curso: https://www.youtube.com/watch?v=uCGkaYYhE9k', //Fundamentos de diseño
+    'Este material te puede servir con el curso: https://www.youtube.com/watch?v=2zypRlzIcHc', //Responsive Design
+    'Este material te puede servir con el curso: https://www.youtube.com/watch?v=JNL_dnDMwp8', //User Testing
+    'Este material te puede servir con el curso: https://www.youtube.com/watch?v=6vlN4DZVQGc', //Brief
+    'Este material te puede servir con el curso: https://www.youtube.com/watch?v=miVcrftnhzM&t=34s', //Prototipado
+    'Este material te puede servir con el curso: https://www.youtube.com/watch?v=fvs0YHvWRvU', //Pruebas de usabilidad
+    'Este material te puede servir con el curso: https://www.youtube.com/watch?v=Zm1KTvGbav4', //Métodos de redacción de entrevistas
+    'Este material te puede servir con el curso: https://www.youtube.com/watch?v=hA17Lk9d9vw', //Desarrollo de Style Guide
+    'Este material te puede servir con el curso: https://www.youtube.com/watch?v=WoNMIxBP7dY', //Atomic Design
+    'Este material te puede servir con el curso: https://www.youtube.com/watch?v=4JQJ-MVFvH4', //Elaboración de flujos y mapeo de casuísticas:
+    'Este material te puede servir con el curso: https://www.youtube.com/watch?v=He2nDD-WdsI', //Desgin Systems
+    'Este material te puede servir con el curso: https://www.youtube.com/watch?v=9nqYFYTEN_k', //Service Design
+    'Este material te puede servir con el curso: https://www.youtube.com/watch?v=bjmLQxQinns',// Customer Experience
+  ],
+  none: 'Lo siento no te entendí, para poder ayudarte el material debe ser Contenido Visual, podcast o video.'
+}
+export default {
+  level_understanding: (level) => {
+    if (level === null) {
+      return utils.responseMsg(levelOpt[0], 'ElicitSlot', 'AyudaCursos', 'NivelComprension' )
+    }
+
+    //Si el nivel de comprensión es 5, le dice el mensaje
+    if (level == 5) {
+      return utils.responseMsg(levelOpt[1], 'Close')
+    }
+
+    //Si responde que su nivel de comprensión está en el rango de 1 a 4
+    if (level < 5 && level >= 1) {
+      return utils.responseMsg(levelOpt[2], 'ElicitSlot', 'AyudaCursos', 'Curso' )
+    }
+    //Si el valor de NivelComprension está fuera del rango del 1-5
+    else {
+      return utils.responseMsg(levelOpt[3], 'ElicitSlot', 'AyudaCursos', 'NivelComprension' )
+    }
+  },
+  course: (course) => {
+    switch (course) {
+      case 'Design Thinking':
+      case 'Fundamentos de Diseño':
+      case 'Responsive Design':
+      case 'User Testing':
+      case 'Brief':
+      case 'Prototipado':
+      case 'Pruebas de Usabilidad':
+      case 'Métodos redacción de entrevistas':
+      case 'Desarrollo de style guide':
+      case 'Atomic Design':
+      case 'Elaboración de flujos y mapeo de casuísticas':
+      case 'Design Systems':
+      case 'Service Design':
+      case 'Customer Experience':
+        return utils.responseMsg(courseOpt[0], 'ElicitSlot', 'AyudaCursos', 'TipoEstudio' )
+      default:
+        return utils.responseMsg('Ese curso no existe, ingrese otro por favor', 'ElicitSlot', 'AyudaCursos', 'Curso' )
+    }
+  },
+  studyType: (studyType) => {
+
+    //Si prefiere estudiar en grupo (eligió la opción para grupo)
+    if (studyType == "grupo") {
+      return utils.responseMsg(studyTypeOpt[0], 'ElicitSlot', 'AyudaCursos', 'TipoComprension' )
+    }
+
+    //Si prefiere estudiar sola, pide elegir el tipo de comprensión (podcast, video, contenido visual)
+    if (studyType == "sola") {
+      return utils.responseMsg(studyTypeOpt[1], 'ElicitSlot', 'AyudaCursos', 'TipoComprension' )
+    }
+    //Si ingresa un valor no válido (ni sola ni en grupo)
+    else {
+      return utils.responseMsg(studyTypeOpt[2], 'ElicitSlot', 'AyudaCursos', 'TipoEstudio' )
+    }
+  },
+  understandType: (understandType, course) => {
+    switch (understandType) {
+      case 'contenido visual':
+        return utils.responseMsg(understandTypeOpt.visualContain)
+      case 'podcast':
+        switch (course) {
+          case 'Design Thinking':
+            return utils.responseMsg(understandTypeOpt.podcast[0], 'Close')
+          case 'Fundamentos de Diseño':
+            return utils.responseMsg(understandTypeOpt.podcast[1], 'Close')
+          case 'Responsive Design':
+            return utils.responseMsg(understandTypeOpt.podcast[2], 'Close')
+          case 'User Testing':
+            return utils.responseMsg(understandTypeOpt.podcast[3], 'Close')
+          case 'Brief':
+            return utils.responseMsg(understandTypeOpt.podcast[4], 'Close')
+          case 'Prototipado':
+            return utils.responseMsg( understandTypeOpt.podcast[5], 'Close')
+          case 'Pruebas de Usabilidad':
+            return utils.responseMsg( understandTypeOpt.podcast[6], 'Close')
+          case 'Métodos redacción de entrevistas':
+            return utils.responseMsg(understandTypeOpt.podcast[7], 'Close')
+          case 'Desarrollo de style guide':
+            return utils.responseMsg( understandTypeOpt.podcast[8], 'Close')
+          case 'Atomic Design':
+            return utils.responseMsg(understandTypeOpt.podcast[9], 'Close')
+          case 'Elaboración de flujos y mapeo de casuísticas':
+            return utils.responseMsg(understandTypeOpt.podcast[10], 'Close')
+          case 'Design Systems':
+            return utils.responseMsg( understandTypeOpt.podcast[11], 'Close')
+          case 'Service Design':
+            return utils.responseMsg(understandTypeOpt.podcast[12], 'Close')
+          case 'Customer Experience':
+            return utils.responseMsg(understandTypeOpt.podcast[13], 'Close')
+          default:
+            return utils.responseMsg('Por el momeento no hay contenido de ayuda para ese curso', 'Close')
+        }
+      case 'video':
+        if (course == 'Design Thinking'){
+          return utils.responseMsg(understandTypeOpt.video[0], 'Close')
+        }
+        else if (course == 'Fundamentos de Diseño'){
+          return utils.responseMsg(understandTypeOpt.video[1], 'Close')
+        }
+        else if (course == 'Responsive Design'){
+          return utils.responseMsg(understandTypeOpt.video[2], 'Close')
+        }
+        else if (course == 'User Testing'){
+          return utils.responseMsg(understandTypeOpt.video[3], 'Close')
+        }
+        else if (course == 'Brief'){
+          return utils.responseMsg(understandTypeOpt.video[4],'Close')
+        }
+        else if (course == 'Prototipado'){
+          return utils.responseMsg(understandTypeOpt.video[5], 'Close')
+        }
+        else if (course == 'Pruebas de Usabilidad'){
+          return utils.responseMsg(understandTypeOpt.video[6], 'Close')
+        }
+        else if (course == 'Métodos redacción de entrevistas'){
+          return utils.responseMsg(understandTypeOpt.video[7], 'Close')
+        }
+        else if (course == 'Desarrollo de style guide'){
+          return utils.responseMsg(understandTypeOpt.video[8], 'Close')
+        }
+        else if (course == 'Atomic Design'){
+          return utils.responseMsg(understandTypeOpt.video[9], 'Close')
+        }
+        else if (course == 'Elaboración de flujos y mapeo de casuísticas'){
+          return utils.responseMsg(understandTypeOpt.video[10], 'Close')
+        }
+        else if (course == 'Design Systems'){
+          return utils.responseMsg(understandTypeOpt.video[11], 'Close')
+        }
+        else if (course == 'Service Design'){
+          return utils.responseMsg(understandTypeOpt.video[12], 'Close')
+        }
+        else if (course == 'Customer Experience') {
+          return utils.responseMsg(understandTypeOpt.video[13], 'Close')
+        } else {
+          return utils.responseMsg('Por el momeento no hay contenido de ayuda para ese curso', 'Close')
+        }
+      default:
+        return utils.responseMsg(understandTypeOpt.none, 'ElicitSlot', 'AyudaCursos', 'TipoComprension' )
+    }
+  }
+}

@@ -1,0 +1,149 @@
+import helpCourse from './helpCourse.js';
+import welcome from './welcome.js'
+import motivacion from './motivacion.js'
+
+let name = null;
+let course = null;
+let level = null;
+let studyType = null;
+let understandType = null;
+let emotionalSentiment = null; //Variable para los datos de la ranura SentimientoEmocional
+let videoUtility = null; //Variable para los datos de la ranura UtilidadVideo
+let coachPsicologist = null; //Variable para los datos de la ranura CoachPsicologo
+
+const data = {}
+
+export const handler = async (event) => {
+    console.log('event main', event)
+    const userId = event.userId
+    const intentName = event.currentIntent.name;    
+
+    //Recibir al usuario para luego derivarlo a las otras intenciones
+    switch(intentName){
+      case 'Bienvenida': 
+        const nameUser = event.currentIntent.slots.Usuario
+        return welcome.hiName(nameUser)
+      case 'AyudaCursos': 
+        let getCourse = event.currentIntent.slots.Curso ?? null;
+        let getLevel = event.currentIntent.slots.NivelComprension ?? null;
+        let getStudyType = event.currentIntent.slots.TipoEstudio ?? null;
+        let getUnderstandType = event.currentIntent.slots.TipoComprension ?? null;
+
+        level = data[userId]?.level ?? null
+        course = data[userId]?.course ?? null
+        studyType = data[userId]?.studyType ?? null
+        understandType = data[userId]?.understandType ?? null
+
+        if (getLevel != null && level == null){
+          level = getLevel
+          if (getLevel < 6 && getLevel > 0)
+            data[userId] = {level}
+          let response = helpCourse.level_understanding(getLevel)
+          if (level != 5)
+            response =  { dialogAction: {...response.dialogAction, slots: {NivelComprension: level,Curso: null, TipoEstudio: null, TipoComprension: null}}}
+          console.log('response', response)
+          return response
+        }
+        
+        if (getCourse == null){
+          let response = helpCourse.course('')
+          response =  { dialogAction: {...response.dialogAction, slots: {NivelComprension: level,Curso: null, TipoEstudio: null, TipoComprension: null}}}
+          console.log('response', response)
+          return response
+        }
+        
+        if (getCourse != null && course == null){
+          course = getCourse
+          data[userId] = {level, course}
+          let response = helpCourse.course(getCourse)
+          response =  { dialogAction: {...response.dialogAction, slots: {NivelComprension: level, Curso: course, TipoEstudio: null, TipoComprension: null}}}
+          console.log('response', response)
+          return response
+        }
+        
+        if (getStudyType == null){
+          let response = helpCourse.studyType('')
+          response =  { dialogAction: {...response.dialogAction, slots: {NivelComprension: level,Curso: course, TipoEstudio: null, TipoComprension: null }}}
+          console.log('response', response)
+          return response
+        }
+        
+        if (getStudyType != null && studyType == null){
+          studyType = getStudyType
+          data[userId] = {level, course, studyType}
+          let response =  helpCourse.studyType(getStudyType)
+          response =  { dialogAction: {...response.dialogAction, slots: {NivelComprension: level,Curso: course, TipoEstudio: studyType, TipoComprension: null }}}
+          console.log('response', response)
+          return response
+        }
+        
+        if (getUnderstandType == null){
+          let response = helpCourse.understandType('', course)
+          response =  { dialogAction: {...response.dialogAction, slots: {NivelComprension: level,Curso: course, TipoEstudio: studyType, TipoComprension: null }}}
+          console.log('response', response)
+          return response
+        }
+        
+        if (getUnderstandType != null && understandType == null){
+          understandType = getUnderstandType
+          let response =  helpCourse.understandType(understandType, course)
+          console.log('response', response)
+          data[userId].level = null
+          data[userId].course = null
+          data[userId].studyType = null
+          return response
+        }
+      break;
+      case 'Motivacion': 
+        let getEmotionalSentiment = event.currentIntent.slots.SentimientoEmocional ?? null;
+        let getVideoUtility = event.currentIntent.slots.UtilidadVideo ?? null;
+        let getCoachPsicologist = event.currentIntent.slots.CoachPsicologo ?? null;
+        
+        emotionalSentiment = data[userId]?.emotionalSentiment ?? null //Guardar el valor que ingresó el usuario en SentimientoEmocional
+        videoUtility = data[userId]?.videoUtility ?? null //Guardar el valor que ingresó el usuario en UtilidadVideo
+        coachPsicologist = data[userId]?.coachPsicologist ?? null //Guardar el valor que ingresó el usuario en CoachPsicologo
+        
+        //Sentimiento Emocional: obtener valor, validar valor, respuestas en base a su valor
+        if (getEmotionalSentiment != null && emotionalSentiment == null){
+          emotionalSentiment = getEmotionalSentiment
+          if (emotionalSentiment < 6 && emotionalSentiment > 0)
+            data[userId] = {emotionalSentiment}
+          let response = motivacion.emotional_level(getEmotionalSentiment)
+          if (emotionalSentiment != 5)
+            response =  { dialogAction: {...response.dialogAction, slots: {SentimientoEmocional: emotionalSentiment,UtilidadVideo: null, CoachPsicologo: null}}}
+          console.log('response', response)
+          return response
+        }
+        
+        //Utilidad Video: obtener valor, validar valor, respuestas en base a su valor
+        if (getVideoUtility != null && videoUtility == null){
+          videoUtility = getVideoUtility
+          data[userId] = {emotionalSentiment, videoUtility}
+          let response = motivacion.utility_video(getVideoUtility)
+          if (videoUtility != 'Si')
+            response =  { dialogAction: {...response.dialogAction, slots: {SentimientoEmocional: emotionalSentiment,UtilidadVideo: videoUtility, CoachPsicologo: null}}}
+          console.log('response', response)
+          return response
+        }
+        
+        if (getCoachPsicologist == null){
+          let response =  motivacion.coach_psicologist('')
+          response =  { dialogAction: {...response.dialogAction, slots: {SentimientoEmocional: emotionalSentiment,UtilidadVideo: videoUtility, CoachPsicologo: null}}}
+          console.log('response', response)
+          return response
+        }
+        
+        //Coach Psicologo: obtener valor, validar valor, respuestas en base a su valor
+        if (getCoachPsicologist != null && coachPsicologist == null){
+          coachPsicologist = getCoachPsicologist
+          let response =  motivacion.coach_psicologist(coachPsicologist)
+          console.log('response', response)
+          data[userId].emotionalSentiment = null
+          data[userId].videoUtility = null
+          return response
+        }
+        
+        
+      break;
+    }
+};

@@ -1,0 +1,145 @@
+export default {
+  responseMsg: (message, type = 'Close', intentName = '', slotName = '') => {
+    switch (type) {
+      case 'Close':
+        return {
+          "dialogAction": {
+            "type": "Close",
+            "fulfillmentState": "Fulfilled",
+            "message": {
+              "contentType": "PlainText",
+              "content": message
+            },
+            // "responseCard": {
+            //   "version": 1,
+            //   "contentType": "application/vnd.amazonaws.card.generic",
+            //   "genericAttachments": [
+            //     {
+            //       "title": "card-title",
+            //       "subTitle": "card-sub-title",
+            //       "imageUrl": "URL of the image to be shown",
+            //       "attachmentLinkUrl": "URL of the attachment to be associated with the card",
+            //       "buttons": [
+            //         {
+            //           "text": "button-text",
+            //           "value": "Value sent to server on button click"
+            //         }
+            //       ]
+            //     }
+            //   ]
+            // }
+          }
+        }
+      case 'ConfirmIntent ':
+        return {
+          "dialogAction": {
+            "type": "ConfirmIntent",
+            "message": {
+              "contentType": "PlainText",
+              "content": message
+            },
+            "intentName": intentName,
+            "slots": {
+              // "slot-name": "value",
+              // "slot-name": "value",
+              // "slot-name": "value"
+            },
+            // "responseCard": {
+            //   "version": integer - value,
+            //   "contentType": "application/vnd.amazonaws.card.generic",
+            //   "genericAttachments": [
+            //     {
+            //       "title": "card-title",
+            //       "subTitle": "card-sub-title",
+            //       "imageUrl": "URL of the image to be shown",
+            //       "attachmentLinkUrl": "URL of the attachment to be associated with the card",
+            //       "buttons": [
+            //         {
+            //           "text": "button-text",
+            //           "value": "Value sent to server on button click"
+            //         }
+            //       ]
+            //     }
+            //   ]
+            // }
+          }
+        }
+      case 'Delegate':
+        return {
+          "dialogAction": {
+            "type": "Delegate",
+            "slots": {
+              // "slot-name": "value",
+              // "slot-name": "value",
+              // "slot-name": "value"
+            },
+            // "kendraQueryRequestPayload": "Amazon Kendra query",
+            // "kendraQueryFilterString": "Amazon Kendra attribute filters"
+          }
+        }
+      case 'ElicitIntent':
+        return {
+          "dialogAction": {
+            "type": "ElicitIntent",
+            "message": {
+              "contentType": "PlainTex",
+              "content": message
+            },
+            // "responseCard": {
+            //   "version": 1,
+            //   "contentType": "application/vnd.amazonaws.card.generic",
+            //   "genericAttachments": [
+            //     {
+            //       "title": "card-title",
+            //       "subTitle": "card-sub-title",
+            //       "imageUrl": "URL of the image to be shown",
+            //       "attachmentLinkUrl": "URL of the attachment to be associated with the card",
+            //       "buttons": [
+            //         {
+            //           "text": "button-text",
+            //           "value": "Value sent to server on button click"
+            //         }
+            //       ]
+            //     }
+            //   ]
+            // }
+          }
+        }
+        case 'ElicitSlot':
+          return {
+            "dialogAction": {
+              "type": "ElicitSlot",
+              "message": {
+                "contentType": "PlainText",
+                "content": message
+              },
+             "intentName": intentName,
+             "slots": {
+                // "slot-name": "value",
+                // "slot-name": "value",
+                // "slot-name": "value"  
+             },
+             "slotToElicit" : slotName,
+            //  "responseCard": {
+            //     "version": integer-value,
+            //     "contentType": "application/vnd.amazonaws.card.generic",
+            //     "genericAttachments": [
+            //         {
+            //            "title":"card-title",
+            //            "subTitle":"card-sub-title",
+            //            "imageUrl":"URL of the image to be shown",
+            //            "attachmentLinkUrl":"URL of the attachment to be associated with the card",
+            //            "buttons":[ 
+            //                {
+            //                   "text":"button-text",
+            //                   "value":"Value sent to server on button click"
+            //                }
+            //             ]
+            //          } 
+            //      ] 
+            //    }
+            }
+          }
+    }
+  }
+}

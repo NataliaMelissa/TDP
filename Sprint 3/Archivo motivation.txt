@@ -1,0 +1,106 @@
+import utils from "./utils.js";
+
+const postMessage = ' ¿Te ayudo el video?'
+
+const emotionalOpt = [
+  'Del 1 al 5 cómo te sientes emocionalmente en este punto de tu vida', //Recibir
+  'Me alegra que te encuentres plenamente bien en tu estado emocional, ya que para aprender algo nuevo tienes que sentirte dispuesta emocionalmente también. Estoy segura que te irá bien en la adquisición de nuevos conocimientos de ahora en adelante. De igual manera, no olvides que estoy acá para servirte :).', //SE = 5
+  'Mira este video que puede servirte en estos momentos: https://www.youtube.com/watch?v=-WDrt2P22vo' + postMessage , //SE = 4
+  'Mira este video que puede servirte en estos momentos: https://www.youtube.com/watch?v=R5DZAvIHi9g' + postMessage, //SE = 3
+  'Mira este video que puede servirte en estos momentos: https://www.youtube.com/watch?v=ABD1gIJeMiY' + postMessage, //SE = 2
+  'Mira este video que puede servirte en estos momentos: https://www.youtube.com/watch?v=v1l8N5HtZk0' + postMessage, //SE = 1
+  'Lo siento, el valor debe ser dentro del rango para poder ayudarte. Del 1 al 5 como te sientes emocionalmente en este punto de tu vida?' //Fuera de rango
+]
+
+
+
+const utilityOpt = [
+  'Te sirvió el video mandado? Sí o No', //Recibir
+  'Que bueno que te haya servido el material que escogimos para ti. Recuerda que estoy para servirte :)', //UV = Sí
+  'Cómo te gustaria ser acompañada para sobrellevar este momento en el que te encuentras. ¿Te gustaría un coach o un psicólogo?', //UV = No
+  'Lo siento, debes decirme si el video fue de utilidad o no. Encontraste el video útil: sí o no?' //Fuera de rango
+]
+
+const coachpsicoOpt = [
+  'Te recomendamos que consultes a este grupo de profesionales en coaching que están dispuestos a servirte en todo momento :) https://icfperu.pe/directorio-coach/', //Coach
+  'Te recomendamos visitar la página de Primeros auxilios psicológicos que brinda la Universidada Continental, te podrán ayudar de forma gratuita a resolver tus problemas :) https://ucontinental.edu.pe/atencion-de-primeros-auxilios-psicologicos-online/#:~:text=Los%20%C2%ABPrimeros%20Auxilios%20Psicol%C3%B3gicos%20(PAP,%2C%20denominados%20%E2%80%9Cconsultorios%20virtuales%E2%80%9D.', //Psicologo
+  'No entiendo, debes indicarme si prefieres un psicólogo o un coach. Ingresa de nuevo el tipo de ayuda que prefieres: coach o psicólogo' //Fuera de rango
+]
+
+export default {
+    emotional_level: (emotionalSentiment) => {
+        if (emotionalSentiment === null) {
+          return utils.responseMsg(emotionalOpt[0], 'ElicitSlot', 'AyudaCursos', 'NivelComprension' )
+        }
+
+        //Si el SentimientoEmocional es 5, le dice el mensaje
+        else if (emotionalSentiment == 5) {
+          return utils.responseMsg(emotionalOpt[1], 'Close')
+        }
+
+        //Si el SentimientoEmocional es 4, mandar mensaje y preguntar si el video fue útil o no
+        else if (emotionalSentiment == 4) {
+          return utils.responseMsg(emotionalOpt[2], 'ElicitSlot', 'Motivacion', 'UtilidadVideo' )
+        }
+    
+        //Si el SentimientoEmocional es 3, mandar mensaje y preguntar si el video fue útil o no
+        else if (emotionalSentiment == 3) {
+          return utils.responseMsg(emotionalOpt[3], 'ElicitSlot', 'Motivacion', 'UtilidadVideo' )
+        }
+        
+        //Si el SentimientoEmocional es 2, mandar mensaje y preguntar si el video fue útil o no
+        else if (emotionalSentiment == 2) {
+          return utils.responseMsg(emotionalOpt[4], 'ElicitSlot', 'Motivacion', 'UtilidadVideo' )
+        }
+        
+        //Si el SentimientoEmocional es 1, mandar mensaje y preguntar si el video fue útil o no
+        else if (emotionalSentiment == 1) {
+          return utils.responseMsg(emotionalOpt[5], 'ElicitSlot', 'Motivacion', 'UtilidadVideo' )
+        }
+        
+        //Si el valor de NivelComprension está fuera del rango del 1-5
+        else {
+          return utils.responseMsg(emotionalOpt[6], 'ElicitSlot', 'Motivacion', 'SentimientoEmocional' )
+        }
+    },
+    
+    utility_video: (utilityVideo) => {
+        //Cuando el usuario aún no ha dicho si el video fue útil o no
+        if (utilityVideo == null) {
+          return utils.responseMsg(utilityOpt[0], 'ElicitSlot', 'Motivacion', 'UtilidadVideo' )
+        }
+        
+        //Si el video sí les sirvió
+        else if (utilityVideo == 'Si') {
+          return utils.responseMsg(utilityOpt[1], 'Close' )
+        }
+        
+        //Si el video no les sirvió
+        else if (utilityVideo == 'No'){
+          return utils.responseMsg(utilityOpt[2], 'ElicitSlot', 'Motivacion', 'CoachPsicologo' )
+        }
+        
+        //Valor no aceptado: diferente de Sí o No
+        else{
+          return utils.responseMsg(utilityOpt[3], 'ElicitSlot', 'Motivacion', 'UtilidadVideo')
+        }
+    },
+    
+    coach_psicologist: (coachPsicologist) => {
+        //Prefieren un coach
+        if (coachPsicologist == 'coach') {
+          return utils.responseMsg(coachpsicoOpt[0], 'Close' )
+        }
+        
+        //Prefieren un psicologo
+        else if (coachPsicologist == 'psicólogo'){
+          return utils.responseMsg(coachpsicoOpt[1], 'Close' )
+        }
+        
+        //Valor no aceptado: diferente de Coach o Psicologo
+        else{
+          return utils.responseMsg(coachpsicoOpt[2], 'ElicitSlot', 'Motivacion', 'CoachPsicologo')
+        }
+    }
+}
+

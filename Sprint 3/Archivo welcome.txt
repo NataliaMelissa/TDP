@@ -1,0 +1,9 @@
+import utils from "./utils.js"
+
+export default {
+  hiName: (name) => {
+    const message = `Hola ${name}, Cómo te puedo ayudar?`
+    const result = utils.responseMsg(message)
+    return result
+  }
+}
